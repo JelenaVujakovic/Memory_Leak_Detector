@@ -28,8 +28,28 @@ int main(int argc, char **argv)
     struct_db_t* struct_db = calloc(1, sizeof(struct_db_t));
     mld_init_primitive_data_support(struct_db);
     //2.Create structure record for structure emp_t
+    static field_info_t emp_fields[] = {
+        FIELD_INFO(emp_t,emp_name,CHAR,0);
+        FIELD_INFO(emp_t, emp_id, UINT32, 0);
+        FIELD_INFO(emp_t, age, UINT32, 0);
+        FIELD_INFO(emp_t, mgr_name, OBJ_PTR, emp_t);
+        FIELD_INFO(emp_t, salary, FLOAT, 0);
+        FIELD_INFO(emp_t, p, OBJ_PTR, 0);
+    }
     //3.Register the structure in structure database
+    REG_STRUCT(struct_db, emp_t, emp_fields);
+
+    static field_info_t stud_fields[] = {
+        FIELD_INFO(student_t,stud_name,CHAR,0);
+        FIELD_INFO(student_t, rollno, UINT32, 0);
+        FIELD_INFO(student_t, age, UINT32, 0);
+        FIELD_INFO(student_t, aggregate, FLOAT, 0);
+        FIELD_INFO(emp_t,best_colleage, OBJ_PTR, student_t);
+    }
+       
+    REG_STRUCT(struct_db, student_t, stud_fields);
     //4.Verify the correctness of structure database
+    print_structure_db(struct_db);
     //5.Demonstrate wirking with object database
 
     return 0;
