@@ -77,25 +77,35 @@ int add_structure_to_struct_db(struct_db_t* struct_db, struct_db_rec_t* struct_r
 		if (add_structure_to_struct_db(struct_db, rec)) {             \
 			assert(0);                                                \
 		} */                                                          \
-	}while(0);                                                        \
-//---------------------------------------------------------------------------------------------
+	} while (0);                                                        \
+			
+//-------------------------------------------------------------------------------------------
+//Object Database structure definition
+typedef struct _object_db_rec_ object_db_rec_t;
 
+struct _object_db_rec_ {
+	object_db_rec_t* next;
+	void* ptr;
+	unsigned int units;
+	struct_db_rec_t* head;
+	unsigned int count;
+}object_db_t;
 
+//Dumping functions
+void print_object_rec(object_db_rec_t* obj_rec, int i);
+void print_object_db(object_db_rec_t* object_db);
 
+//API to malloc the object
+void* xcalloc(object_db_rec_t* object_db, char* struct_name, int units);
 
+//API to register root object
+void mld_register_root_object(object_db_t* object_db, void* objptr, char* struct_name, unsigned int units);
+void set_mld_object_as_global_root(object_db_t* object_db, void* obj_ptr);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+//API for MLD Algorithm
+void run_mld_algorithm(object_db_t* object_db);
+void report_leaked_objects(object_db_t* object_db);
+void mld_set_dynamic_object_as_root(object_db_t* object_db, void* obj_ptr);
+void mld_init_primitive_data_types_support(struct_db_t* struct_db);
 
 #endif //__MLD__
