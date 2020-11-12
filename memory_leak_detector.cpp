@@ -63,3 +63,75 @@ static struct_db_rec_t* struct_db_look_up(struct_db_t* struct_db, char* struct_n
 	return NULL;
 }
 
+static void add_object_to_object_db(object_db_t* object_db, void* ptr, int units, struct_db_rec_t* struct_rec, mld_boolean_t is_root) {
+	object_db_rec_t* obj_rec = object_db_look_up(object_db ptr);
+	//Check if object is alredy added
+	assert(!obj_rec);
+	object_rec = calloc(1, sizeof(object_db_rec_t));
+
+	obj_rec->next = NULL;
+	obj_rec->ptr = ptr;
+	obj_rec->units = units;
+	object_rec->struct_rec = struct_rec;
+	object_rec->is_visited = MLD_FALSE;
+	object_rec->is_root = is_root;
+
+	object_db_rec_t* head = object_db->head;
+
+	if (!head) {
+		object_db->head = obj_rec;
+		obj_rec->next = NULL;
+		object_db->count++;
+		return;
+	}
+
+	object_rec->next = head;
+	object_db->head = obj_rec;
+	object_db->count++;
+}
+//xcalloc funtion set object by default to non-root
+void xcalloc(object_db_t* object_db, char* struct_name, int units) {
+	struct_db_rec_t* struct_rec = struct_db_look_up(object_db->struct_db, struct_name);
+	assert(struct_rec);
+	void* ptr = calloc(units, struct_record->ds_size);
+	add_object_to_object_db(object_db, units, struct_rec, MLD_FALSE);
+	return ptr;
+}
+
+static void delete_object_record_from_object_db(object_db_t* obj_db, object_db_rec_t* object_rec) {
+	assert(object_rec);
+	object_db_rec_t* head = object_db->head;
+	if (head == object_rec) {
+		object_db->head = object_rec->next;
+		free(object_rec);
+		return;
+	}
+
+	object_db_rec_t* prev = head;
+	head = head->next;
+
+	while (head) {
+		if (head != object_rec) {
+			prev = head;
+			head = head->next;
+			continue;
+		}
+		prev->next = head->next;
+		head->next = NULL;
+		free(head);
+		return;
+	}
+}
+void xfree(object_db_t* object_db, void* ptr) {
+	if (!ptr) return;
+	object_db_rec_t* object_rec = object_db_look_up(object_db, ptr);
+	assert(object_rec);
+	assert(object_rec->ptr);
+	free(object_rec->ptr);
+	object_rec->ptr = NULL;
+	//Delete object record from object db
+	delete_object_record_from_object_db(object_db, object_rec);
+}
+
+
+
