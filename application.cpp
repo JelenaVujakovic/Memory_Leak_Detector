@@ -50,7 +50,27 @@ int main(int argc, char **argv)
     REG_STRUCT(struct_db, student_t, stud_fields);
     //4.Verify the correctness of structure database
     print_structure_db(struct_db);
-    //5.Demonstrate wirking with object database
+    //5.Demonstrate working with object database
+    //Initialize a new object database
+    object_db_t* object_db = calloc(1, sizeof(object_db_t));
+    object_db->struct_db = struct_db;
+
+    //Create sample objects
+    student_t* student_1 = xcalloc(object_db, "student_t", 1);
+    mld_set_dynamic_object_as_root(object_db, student_1);
+
+    student_t* student_2 = xcalloc(object_db, "student_t", 1);
+    student_2->best_colleage = student_1;
+
+    emp_t* emp_1 = xcalloc(object_db, "emp_t", 2);
+    mld_set_dynamic_object_as_root(object_db, emp_1);
+    emp_1->p = xcalloc(object_db, "int", 1);
+
+    print_object_db(object_db);
+
+    run_mld_algortithm(object_db);
+    printf("Leaked objectd: \n");
+    report_leaked_objects(object_db);
 
     return 0;
 }
