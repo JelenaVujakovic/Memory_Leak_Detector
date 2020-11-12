@@ -24,7 +24,13 @@ typedef struct student_ {
 
 int main(int argc, char **argv)
 {
-   
+    //1.Initialize a new structure database
+    struct_db_t* struct_db = calloc(1, sizeof(struct_db_t));
+    mld_init_primitive_data_support(struct_db);
+    //2.Create structure record for structure emp_t
+    //3.Register the structure in structure database
+    //4.Verify the correctness of structure database
+    //5.Demonstrate wirking with object database
 
     return 0;
 }

@@ -62,6 +62,11 @@ void print_structure_db(struct_db_t* struct_db);
 //Function to add structure recorf in a structure database
 int add_structure_to_struct_db(struct_db_t* struct_db, struct_db_rec_t* struct_rec);
 
+//Structure Registration helping APIs
+#define FIELD_INFO(struct_name,fld_name,dtype,nested_struct_name)    \
+	{#fld_name,dtype,FIELD_SIZE(struct_name,fld_name),				 \
+	OFFSETOF(struct_name,fld_name),#nested_struct_name}
+
 #define REG_STRUCT(struct_db,st_name,fields_arra) \
 	do{	/*								  \
 		struct_db_rec_t* rec = calloc(1, sizeof(struct_db_rec_t));    
