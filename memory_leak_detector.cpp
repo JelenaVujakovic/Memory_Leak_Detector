@@ -132,6 +132,51 @@ void xfree(object_db_t* object_db, void* ptr) {
 	//Delete object record from object db
 	delete_object_record_from_object_db(object_db, object_rec);
 }
+//Dumping functions for Object database
+void print_obj_rec(object_db_rec_t* obj_rec, int i) {
+	if (!obj_rec) return;
+	printf(ANSI_COLOR_CYAN "----------------------------------------|\n"ANSI_COLOR_RESET);
+	printf(ANSI_COLOR_YELOW "%-3d ptr = %-10p | next= %-10p | units=%-4d | struct_name = %-10s | is_root = %s | \n" ANSI_COLOR_RESET, i, obj_rec->next, obj_rec->units, obj_rec->struct_rec->struct_name, obj_rec->is_root ? "TRUE" : "FALSE");
+	printf(ANSI_COLOR_CYAN "----------------------------------------|\n", ANSI_COLOR_RESET);
+}
+void print_object_db(object_db_t* object_db) {
+	object_db_rec_t* head = object_db->head;
+	unsigned int i = 0;
+	printf(ANSI_COLOR_CYAN "Printing object database.\n");
+	for (; head; head = head->next) {
+		print_object_rec(head,i++)
+	}
+}
+//The global object of the app which is not created by xcalloc should be registered with MLD using below API
+void mld_register_global_object_as_root(object_db_t* object_db, void* objptr, char* struct_name, unsigned int units) {
+	struct_db_rec_t* struct_rec = struct_db_look_up(object_db->struct_db, struct_name);
+	assert(struct_rec);
+	//Create new object record and add to object database
+	add_object_to_object_db(object_db, objptr, units, struct_rec, MLD_TRUE);
+}
+//App might create and object using xcalloc,but at the same time object can be root object.Use this API to override the object flags for the object present in object db
+void mld_set_dynamic_object_as_root(object_db_t* object_db, void* obj_ptr) {
+	object_db_rec_t obj_rec = object_db_look_up(object_db, obj_ptr);
+	assert(obj_rec);
+	obj_rec->is_root = MLD_TRUE;
+}
+static object_db_rec_t* get_next_root_object(object_db_t* object_db, object_db_rec_t* starting_from_here) {
+	object_db_rec_t* first = starting_from_here ? starting_from_here->next : obj_db->head;
+	while (first) {
+		if (first->is_root)
+			return first;
+		first = first->next;
+	}
+	return NULL;
+}
+static void init_mld_algorithm(object_db_t* object_db) {
+	object_db_rec_t* obj_rec = object_db->head;
+	while (obj_rec) {
+		obj_rec->is_visited = MLD_FALSE;
+		obj_rec = obj_rec->next;
+	}
+}
+
 
 
 
