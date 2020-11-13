@@ -68,7 +68,7 @@ int add_structure_to_struct_db(struct_db_t* struct_db, struct_db_rec_t* struct_r
 	OFFSETOF(struct_name,fld_name),#nested_struct_name}
 
 #define REG_STRUCT(struct_db,st_name,fields_arra) \
-	do{	/*								  \
+	do{	                                     						  \
 		struct_db_rec_t* rec = calloc(1, sizeof(struct_db_rec_t));    
 		strncpy(rec->struct_name, #st_name, MAX_STRUCTURE_NAME_SIZE); \ 
 		rec->ds_size = sizeof(st_name);                               \
@@ -76,7 +76,7 @@ int add_structure_to_struct_db(struct_db_t* struct_db, struct_db_rec_t* struct_r
 		rec->fields = fields_arr;                                     \
 		if (add_structure_to_struct_db(struct_db, rec)) {             \
 			assert(0);                                                \
-		} */                                                          \
+		}                                                             \
 	} while (0);                                                        \
 			
 //-------------------------------------------------------------------------------------------
