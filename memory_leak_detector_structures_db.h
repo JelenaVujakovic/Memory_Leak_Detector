@@ -69,11 +69,9 @@ typedef struct _struct_db_{
 /*Structure Data base Definition Ends*/
 
 /* Printing functions*/
-void
-print_structure_rec (struct_db_rec_t *struct_rec);
+void print_structure_rec (struct_db_rec_t *struct_rec);
 
-void
-print_structure_db(struct_db_t *struct_db);
+void print_structure_db(struct_db_t *struct_db);
 
 /* Fn to add the structure record in a structure database */
 
