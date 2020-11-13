@@ -1,8 +1,7 @@
-#ifndef __CSS__
-#define __CSS__
+#ifndef CSS_H_INCLUDED
+#define CSS_H_INCLUDED
 
-#define ANSI_COLOR_YELOW "\x1b[31m"
-#define ANSI_COLOR_CYAN "\x1b[36m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
 
-#endif
-
+#endif // CSS_H_INCLUDED
