@@ -22,14 +22,12 @@ typedef struct _object_db_{
 } object_db_t;
 
 
-/*Dumping functions*/
-void
-print_object_rec(object_db_rec_t *obj_rec, int i);
+//Print info functions
+void print_object_rec(object_db_rec_t *obj_rec, int i);
 
-void
-print_object_db(object_db_t *object_db);
+void print_object_db(object_db_t *object_db);
 
-/*API to malloc the object*/
+//API to malloc the object
 void *xcalloc(object_db_t *object_db, char *struct_name, int units);
 
 
